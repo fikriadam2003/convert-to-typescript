@@ -4,8 +4,35 @@ import { CreateCompany, GetAllCompanys, GetCompanybycode, RemoveCompany, UpdateC
 import { connect, useDispatch, useSelector } from "react-redux";
 import { OpenPopup } from "../Redux/Action";
 import CloseIcon from "@mui/icons-material/Close"
+import { AnyAction } from "redux";
 
-const Company = (props) => {
+
+ export interface Company{
+    id:number;
+    name:string;
+    email:string;
+    phone:string;
+    Address:string;
+    type:string;
+
+
+
+}
+
+export interface CompanyState {
+    isloading: Boolean;
+    errormessage:string;
+    companylist: Company[];
+    companyobj:Company;
+    
+};
+
+interface CompanyProps {
+    companystate:CompanyState;
+    loadcompany:() => void;
+};
+
+const Company  = (props:CompanyProps) => {
     const columns = [
         { id: 'id', name: 'Id' },
         { id: 'name', name: 'Name' },
@@ -16,24 +43,24 @@ const Company = (props) => {
         { id: 'action', name: 'Action' }
     ]
 
-    const dispatch = useDispatch();
+    const dispatch:any = useDispatch();
 
-    const [id, idchange] = useState(0);
-    const [name, namechange] = useState('');
-    const [email, emailchange] = useState('');
-    const [phone, phonechange] = useState('');
-    const [address, addresschange] = useState('');
-    const [type, typechange] = useState('MNC');
-    const [open, openchange] = useState(false);
-    const [agreeterm, agreetermchange] = useState(true);
+    const [id, idchange] = useState<number>(0);
+    const [name, namechange] = useState<string>('');
+    const [email, emailchange] = useState<string>('');
+    const [phone, phonechange] = useState<string>('');
+    const [address, addresschange] = useState<string>('');
+    const [type, typechange] = useState<string>('MNC');
+    const [open, openchange] = useState<boolean>(false);
+    const [agreeterm, agreetermchange] = useState<Boolean>(true);
 
-    const [rowperpage, rowperpagechange] = useState(5);
-    const [page, pagechange] = useState(0);
+    const [rowperpage, rowperpagechange] = useState<number>(5);
+    const [page, pagechange] = useState<number>(0);
 
-    const [isedit, iseditchange] = useState(false);
-    const [title, titlechange] = useState('Create company');
+    const [isedit, iseditchange] = useState<boolean>(false);
+    const [title, titlechange] = useState<string>('Create company');
 
-    const editobj = useSelector((state) => state.company.companyobj);
+    const editobj = useSelector((state: { company: CompanyState }) => state.company.companyobj);
 
     useEffect(() => {
         if (Object.keys(editobj).length > 0) {
@@ -49,11 +76,11 @@ const Company = (props) => {
 
     }, [editobj])
 
-    const handlepagechange = (event, newpage) => {
+    const handlepagechange = (event:React.MouseEvent<HTMLButtonElement>| null, newpage:number) => {
         pagechange(newpage);
     }
 
-    const handlerowperpagechange = (event) => {
+    const handlerowperpagechange = (event:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         rowperpagechange(+event.target.value);
         pagechange(0);
     }
@@ -66,12 +93,12 @@ const Company = (props) => {
     const closepopup = () => {
         openchange(false);
     }
-    const openpopup = () => {
+    const openpopup = ():any => {
         openchange(true);
         clearstate();
         dispatch(OpenPopup())
     }
-    const handlesubmit = (e) => {
+    const handlesubmit = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const _obj = { id, name, email, phone, Address: address, type };
         if (isedit) {
@@ -82,14 +109,14 @@ const Company = (props) => {
         closepopup();
     }
 
-    const handleEdit = (code) => {
+    const handleEdit = (code:number) => {
         iseditchange(true);
         titlechange('Update company');
         openchange(true);
         dispatch(GetCompanybycode(code))
     }
 
-    const handleRemove = (code) => {
+    const handleRemove = (code:number) => {
         if (window.confirm('Do you want to remove?')) {
             dispatch(RemoveCompany(code));
         }
@@ -123,31 +150,30 @@ const Company = (props) => {
                                         {columns.map((column) =>
                                             <TableCell key={column.id} style={{ color: 'white' }}>{column.name}</TableCell>
                                         )}
-                                    </TableRow>
+                            </TableRow>
 
                                 </TableHead>
                                 <TableBody>
-                                    {props.companystate.companylist &&
-                                        props.companystate.companylist
-                                            .slice(page * rowperpage, page * rowperpage + rowperpage)
-                                            .map((row, i) => {
-                                                return (
-                                                    <TableRow key={i}>
-                                                        <TableCell>{row.id}</TableCell>
-                                                        <TableCell>{row.name}</TableCell>
-                                                        <TableCell>{row.email}</TableCell>
-                                                        <TableCell>{row.phone}</TableCell>
-                                                        <TableCell>{row.Address}</TableCell>
-                                                        <TableCell>{row.type}</TableCell>
-                                                        <TableCell>
-                                                            <Button onClick={e => { handleEdit(row.id) }} variant="contained" color="primary">Edit</Button>
-                                                            <Button onClick={e => { handleRemove(row.id) }} variant="contained" color="error">Delete</Button>
+                                {Array.isArray(props.companystate.companylist) && 
+                                   props.companystate.companylist.slice(page * rowperpage, page * rowperpage + rowperpage)
+                                   .map((row, i) => {
+                                      return (
+                                     <TableRow key={i}>
+                                        <TableCell>{row.id}</TableCell>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.phone}</TableCell>
+                                        <TableCell>{row.Address}</TableCell>
+                                        <TableCell>{row.type}</TableCell>
+                                        <TableCell>
+                                         <Button onClick={e => { handleEdit(row.id) }} variant="contained" color="primary">Edit</Button>
+                                       <Button onClick={e => { handleRemove(row.id) }} variant="contained" color="error">Delete</Button>
+                                        </TableCell>
+                            </TableRow>
+    );
+  })
+}
 
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            })
-                                    }
 
                                 </TableBody>
                             </Table>
@@ -182,7 +208,11 @@ const Company = (props) => {
                                     <FormControlLabel value="MNC" control={<Radio color="success"></Radio>} label="MNC"></FormControlLabel>
                                     <FormControlLabel value="DOMESTIC" control={<Radio></Radio>} label="DOMESTIC"></FormControlLabel>
                                 </RadioGroup>
-                                <FormControlLabel checked={agreeterm} onChange={e => { agreetermchange(e.target.checked) }} control={<Checkbox></Checkbox>} label="Agree Terms & Conditions"></FormControlLabel>
+                                <FormControlLabel checked={(agreeterm as boolean) ?? false}onChange={event => { 
+                                                   const target = event.target as HTMLInputElement;
+                                                            if (target instanceof HTMLInputElement) {
+                                                    agreetermchange(target.checked); }}} 
+                                                  control={<Checkbox></Checkbox>} label="Agree Terms & Conditions"></FormControlLabel>
                                 <Button disabled={!agreeterm} variant="contained" type="submit">Submit</Button>
                             </Stack>
                         </form>
@@ -192,13 +222,13 @@ const Company = (props) => {
     );
 }
 
-const mapStatetoProps = (state) => {
+const mapStatetoProps = (state:{company:CompanyState}) => {
     return {
         companystate: state.company
     }
 }
 
-const mapDispatchtoProps = (dispatch) => {
+const mapDispatchtoProps = (dispatch:any) => {
     return {
         loadcompany: () => dispatch(GetAllCompanys())
     }

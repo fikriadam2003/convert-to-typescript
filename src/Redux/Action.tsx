@@ -6,14 +6,14 @@ export const makeRequest=()=>{
     }
 }
 
-export const getAllRequestSuccess=(data)=>{
+export const getAllRequestSuccess=(data:any)=>{
     return{
         type:REQ_GETALL_SUCC,
         payload:data
     }
 }
 
-export const getAllRequestFail=(err)=>{
+export const getAllRequestFail=(err:string)=>{
     return{
         type:REQ_GETALL_FAIL,
         payload:err
@@ -26,28 +26,28 @@ export const OpenPopup=()=>{
     }
 }
 
-export const AddRequest=(data)=>{
+export const AddRequest=(data:any)=>{
     return{
         type:REQ_ADD_SUCC,
         payload:data
     }
 }
 
-export const UpdateRequest=(data)=>{
+export const UpdateRequest=(data:any)=>{
     return{
         type:REQ_UPDATE_SUCC,
         payload:data
     }
 }
 
-export const RemoveRequest=(code)=>{
+export const RemoveRequest=(code:Number)=>{
     return{
         type:REQ_DELETE_SUCC,
         payload:code
     }
 }
 
-export const getbycodeSuccess=(data)=>{
+export const getbycodeSuccess=(data:any)=>{
     return{
         type:REQ_GETBYCODE_SUCC,
         payload:data

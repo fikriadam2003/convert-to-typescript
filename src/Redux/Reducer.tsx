@@ -1,13 +1,20 @@
 import { MAKE_REQ, OPEN_POPUP, REQ_ADD_SUCC, REQ_DELETE_SUCC, REQ_GETALL_FAIL, REQ_GETALL_SUCC, REQ_GETBYCODE_SUCC, REQ_UPDATE_SUCC } from "./ActionType"
 
+export interface CompanyStates {
+    isloading: boolean;
+    companylist: any[]; 
+    companyobj: any;
+    errormessage: string | null;
+}
 export const initialstate = {
     isloading: false,
     companylist: [],
     companyobj: {},
-    errormessage: ''
+    errormessage: null
+    
 }
 
-export const CompanyReducer = (state = initialstate, action) => {
+export const CompanyReducer = (state :CompanyStates= initialstate, action:any) => {
     switch (action.type) {
         case MAKE_REQ:
             return {

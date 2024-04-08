@@ -4,5 +4,5 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 
 const rootreducer=combineReducers({company:CompanyReducer})
-const compstore=configureStore({reducer:rootreducer,middleware:[thunk,logger]})
-export default compstore;
+const compstore=configureStore({reducer:rootreducer,middleware:[thunk]})
+export default compstore; 
