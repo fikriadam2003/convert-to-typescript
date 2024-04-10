@@ -16,7 +16,7 @@ if (rootElement) {
     </React.StrictMode>
   );
 
-  reportWebVitals(console.log); // Passing a function as argument, for example, console.log
+  reportWebVitals(console.log); 
 } else {
   console.error("Root element not found!");
 }

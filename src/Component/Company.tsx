@@ -4,7 +4,7 @@ import { CreateCompany, GetAllCompanys, GetCompanybycode, RemoveCompany, UpdateC
 import { connect, useDispatch, useSelector } from "react-redux";
 import { OpenPopup } from "../Redux/Action";
 import CloseIcon from "@mui/icons-material/Close"
-import { AnyAction } from "redux";
+
 
 
  export interface Company{
@@ -154,26 +154,27 @@ const Company  = (props:CompanyProps) => {
 
                                 </TableHead>
                                 <TableBody>
-                                {Array.isArray(props.companystate.companylist) && 
-                                   props.companystate.companylist.slice(page * rowperpage, page * rowperpage + rowperpage)
-                                   .map((row, i) => {
-                                      return (
-                                     <TableRow key={i}>
-                                        <TableCell>{row.id}</TableCell>
-                                        <TableCell>{row.name}</TableCell>
-                                        <TableCell>{row.email}</TableCell>
-                                        <TableCell>{row.phone}</TableCell>
-                                        <TableCell>{row.Address}</TableCell>
-                                        <TableCell>{row.type}</TableCell>
-                                        <TableCell>
-                                         <Button onClick={e => { handleEdit(row.id) }} variant="contained" color="primary">Edit</Button>
-                                       <Button onClick={e => { handleRemove(row.id) }} variant="contained" color="error">Delete</Button>
-                                        </TableCell>
-                            </TableRow>
-    );
-  })
-}
+                                {props.companystate.companylist &&
+                                        props.companystate.companylist
+                                            .slice(page * rowperpage, page * rowperpage + rowperpage)
+                                            .map((row, i) => {
+                                                return (
+                                                    <TableRow key={i}>
+                                                        <TableCell>{row.id}</TableCell>
+                                                        <TableCell>{row.name}</TableCell>
+                                                        <TableCell>{row.email}</TableCell>
+                                                        <TableCell>{row.phone}</TableCell>
+                                                        <TableCell>{row.Address}</TableCell>
+                                                        <TableCell>{row.type}</TableCell>
+                                                        <TableCell>
+                                                            <Button onClick={e => { handleEdit(row.id) }} variant="contained" color="primary">Edit</Button>
+                                                            <Button onClick={e => { handleRemove(row.id) }} variant="contained" color="error">Delete</Button>
 
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                    }
 
                                 </TableBody>
                             </Table>
